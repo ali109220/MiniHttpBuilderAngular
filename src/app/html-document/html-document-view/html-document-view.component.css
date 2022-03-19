@@ -1,0 +1,26 @@
+p-inputnumber, .p-inputnumber {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.p-inputtext {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.accountLogInOut{
+    float: right;
+}
+label{    
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+.text-name-top{
+    height: 45px;width: 300px;margin: 10px;
+}
+.btn-top{
+    height: 45px;
+    margin: 10px;
+    width: 200px;
+}
+

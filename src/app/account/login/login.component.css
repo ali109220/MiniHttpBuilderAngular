@@ -1,0 +1,33 @@
+.login {
+    min-height: 100vh;
+  }
+  .login-heading {
+    font-weight: 300;
+  }
+  
+  .btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+  label{
+    width: 100%;
+    font-size: 20px;
+    margin: 10px 0;
+  }
+  .p-inputtext {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.title-logo{
+  margin-top: 10px;
+  font-family: cursive;
+  font-weight: 600;
+  font-size: xx-large;
+  color: blueviolet;
+
+}
+a{
+  font-size: 14px;
+
+}

@@ -1,0 +1,66 @@
+<p-progressSpinner *ngIf="loading" ></p-progressSpinner>
+<div class="container-fluid ps-md-0">
+    <p-toast></p-toast>
+    <div class="row g-0">
+      <div class="col-md-3 col-lg-3"></div>
+      <div class="col-md-8 col-lg-6">
+        <div class="login d-flex align-items-center py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9 col-lg-8 mx-auto">
+                <h1 class="cover-heading title-logo">Mini html builder</h1>
+                <h3 class="login-heading mb-4">Welcome back!</h3>
+  
+                <!-- Sign In Form -->
+
+                <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+                    <div class="form-floating mb-3">
+                        <div class="col-md-12 col-sm-12">
+                          <label>Username</label>
+                          <input pInputText [(ngModel)]="registerFormInput.username" formControlName="username"
+                          [ngClass]="{'ng-invalid ng-dirty': submitted && f.username.errors}">
+                          <div *ngIf="submitted && f.username.errors">
+                            <div *ngIf="f.username.errors.required" class="p-error">Required!</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-floating mb-3">
+                        <div class="col-md-12 col-sm-12">
+                        <label>Email</label>
+                        <input pInputText [(ngModel)]="registerFormInput.email" formControlName="email"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f.email.errors}">
+                        <div *ngIf="submitted && f.email.errors">
+                            <div *ngIf="f.email.errors.required" class="p-error">Required!</div>
+                            <div *ngIf="f.email.errors.email" class="p-error">Email is not valid!</div>
+                        </div>
+                    </div>
+                      </div>
+                      <p-progressSpinner *ngIf="loading" ></p-progressSpinner>
+                      <div class="form-floating mb-3">
+                        <div class="col-md-12 col-sm-12">
+                          <label>Password</label>
+                          <input pInputText type="password" [(ngModel)]="registerFormInput.password" formControlName="password"
+                          [ngClass]="{'ng-invalid ng-dirty': submitted && f.password.errors}">
+                          <div *ngIf="submitted && f.password.errors">
+                            <div *ngIf="f.password.errors.required" class="p-error">Required!</div>
+                          </div>
+                        </div>
+                      </div>
+                  
+  
+                  <div class="d-grid">
+                    <button color="primary" mat-raised-button  type="submit">Sign up</button>
+                    <div class="text-center mt-5">
+                      <a class="small" routerLink="../login">Have an account go to login page...</a>
+                    </div>
+                  </div>
+  
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

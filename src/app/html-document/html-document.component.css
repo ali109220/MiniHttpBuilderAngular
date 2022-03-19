@@ -1,0 +1,18 @@
+.file-card {
+    max-width: 300px;
+  }
+.btn-top{
+  height: 45px;
+  margin-top: 5px;
+  width: 170px;
+  margin-left: auto;
+
+}
+.title-logo{
+  margin-top: 10px;
+  font-family: cursive;
+  font-weight: 600;
+  font-size: xx-large;
+  color: blueviolet;
+
+}

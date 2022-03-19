@@ -1,0 +1,52 @@
+<div class="container">
+  <p-toast></p-toast>
+<div class="row" *ngIf="loading" style="    margin-left: 45%;
+margin-top: 22%;">
+  <p-progressSpinner ></p-progressSpinner>
+</div>
+<div class="row" *ngIf="!loading" >
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <h1 class="title-logo">Mini Html Builder</h1>
+    <button *ngIf="loginButtonShow" mat-raised-button color="primary"  class="btn-top accountLogInOut" routerLink="../login">Login</button>
+    <button *ngIf="!loginButtonShow" mat-raised-button color="warn"  class="btn-top accountLogInOut" (click)="onClickLogout($event)">Logout</button>
+    </nav>
+  </div>
+    <div class="row mt-5"  *ngIf="!loading && showAddButton"  >
+        <div class="col-md-4"  *ngFor="let doc of htmlDocs">
+            <mat-card class="file-card m-5">
+                <mat-card-header>
+                  <mat-card-title>{{doc.name}}</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="assets/imgs/file.png">
+                <mat-card-actions>
+                    <button mat-fab color="primary" class="m-2" (click)="onClickEdit(doc.id)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                  <button mat-fab color="primary" (click)="onClickDelete(doc.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+        </div>
+        <div class="col-md-4" >
+          <mat-card class="file-card m-5">
+              <mat-card-header>
+                <mat-card-title>Add new Html Document</mat-card-title>
+              </mat-card-header>
+              <img mat-card-image src="assets/imgs/file.png">
+              <mat-card-actions>
+                    <button mat-fab color="primary" class="m-2" (click)="showAddButton=!showAddButton">
+                      <mat-icon>add</mat-icon>
+                    </button>
+              </mat-card-actions>
+            </mat-card>
+      </div>
+        <div class="col-md-4"style="margin: auto;">
+                
+        </div>
+
+    </div>
+    <div class="row mt-1" *ngIf="!showAddButton">
+        <app-html-document-view [docId]="currentDocId" (onClose)="afterCloseDocument($event)"></app-html-document-view>
+    </div>
+</div>

@@ -1,0 +1,248 @@
+<p-toast></p-toast>
+<div class="row" *ngIf="loading" style="    margin-left: 45%;
+margin-top: 22%;">
+  <p-progressSpinner ></p-progressSpinner>
+</div>
+<div class="row">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <input pInputText [(ngModel)]="fileName" class="text-name-top">
+    <button mat-raised-button color="primary" class="btn-top" (click)="onClickSaveFile($event)">Save</button>
+    <button mat-raised-button color="accent" class="btn-top" (click)="onClickExportFile($event)">Export As HTML</button>
+    <button mat-raised-button color="warn"  class="btn-top" (click)="onClickCancelFile($event)">Cancel</button>
+    </nav>
+  </div>
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-12">
+      <mat-list>
+        <mat-list-item style="
+        margin: 30px 15px;">
+
+          <button style="width: 190px;
+          height: 68px;" mat-button color="primary" 
+            (click)="onClickTextDragEle($event)">
+            <mat-icon style="    top: 5px;
+            position: absolute;
+            font-size: 60px;
+            left: 0%;"
+            >text_format</mat-icon>
+            Text
+          </button>
+        </mat-list-item>
+        <mat-list-item style="
+        margin: 30px 15px;">
+
+          <button style="width: 190px;
+          height: 68px;" mat-button color="primary" 
+            (click)="onClickImageDragEle($event)">
+            <mat-icon style="    top: 5px;
+            position: absolute;
+            font-size: 60px;
+            left: 0%;" >image</mat-icon>
+            Image
+          </button>
+        </mat-list-item>
+        <mat-list-item style="
+        margin: 30px 15px;">
+
+          <button style="width: 190px;
+          height: 68px;" mat-button color="primary" (click)="onClickButtonDragEle($event)">
+            <mat-icon style="top: 5px;
+            position: absolute;
+            font-size: 60px;
+            left: 0%;" >indeterminate_check_box</mat-icon>
+            Button
+          </button>
+        </mat-list-item>
+        </mat-list>
+    </div>
+    <div class="col-lg-7 col-md-7 col-sm-12">
+      <mat-card>
+        <div class="container dragDropAreaHtml" style="min-height: 690px;">
+            <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                <div class="row mp-3 htmlBox" *ngFor="let htmlElement of htmlElements; index as i;"
+                 cdkDrag (click)="clickdragEle($event)" [id]="htmlElement.elementId" style="width: 100%;
+                 height: auto;" [ngClass]="{'text-paragraph': htmlElement.elementType=='text', 'image-section': htmlElement.elementType=='image', 'button-section': htmlElement.elementType=='button'}">
+                 <div *ngIf="htmlElement.elementType=='text'" [innerHTML]="htmlElement.htmlText | safeHtml"></div> 
+
+                  <div *ngIf="htmlElement.elementType=='image'" class="row">
+                    <img [src]="htmlElement.link" alt="There is an error" [width]="htmlElement.width" [height]="htmlElement.height">
+                  </div>
+                  <div *ngIf="htmlElement.elementType=='button'" class="row">
+                    <a *ngIf="htmlElement.buttonType == 'link'" [href]="htmlElement.link">{{htmlElement.text}}</a>
+                    <button *ngIf="htmlElement.buttonType != 'link'" [type]="htmlElement.buttonType">{{htmlElement.text}}</button>
+                  </div>
+                </div>
+              </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12">
+      <mat-card>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+         <button mat-menu-item (click)="currentElementId == '' ? typeOfShow='none' : typeOfShow='margin'">
+                <!-- <mat-icon>Properties</mat-icon> -->
+                <span>Margins</span>
+          </button>
+          <button mat-menu-item (click)="currentElementId == '' ? typeOfShow='none' : typeOfShow='prop'">
+            <!-- <mat-icon>Properties</mat-icon> -->
+            <span>Properties</span>
+          </button>
+          <button *ngIf="currentElementType=='text'" mat-menu-item  (click)="currentElementId == '' ? typeOfShow='none' : typeOfShow='text'">
+            <!-- <mat-icon>voicemail</mat-icon> -->
+            <span>Text</span>
+          </button>
+        </mat-menu>
+        <div class="row" *ngIf="typeOfShow=='text'">
+          <ejs-richtexteditor id='iframeRTE' [toolbarSettings]='tools' [fontFamily]='fontFamily' [value]='theHtmlString' (blur)="onChangeTextEditor($event)">
+            </ejs-richtexteditor>
+        </div>
+        <div class="row" *ngIf="typeOfShow=='prop'">
+            <div *ngIf="currentElementType =='image'" class="row ml-2 mb-3">
+              <div class="col-md-12 col-sm-12">
+                  <label>Image Url</label>
+                  <input pInputText [(ngModel)]="imageSrc" (change)="onChangeImgUrl($event)" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <mat-button-toggle-group [(ngModel)]="controlAlignment" (click)="onhangeControlAlignemt($event)" aria-label="control Style" [ngModelOptions]="{standalone: true}">
+                  <mat-button-toggle value="left" aria-label="Text align left">
+                    <mat-icon>format_align_left</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="center" aria-label="Text align center">
+                    <mat-icon>format_align_center</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="right" aria-label="Text align right">
+                    <mat-icon>format_align_right</mat-icon>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <label for="">Width</label>
+                <mat-slider thumbLabel [displayWith]="formatLabelOfSlider" style="width: 80%;" 
+                [(ngModel)]="imageWidth" (blur)="onhangeImageWidth($event)" [ngModelOptions]="{standalone: true}"
+                tickInterval="1000" step="10" min="10" max="1350"
+                  aria-label="pixles"></mat-slider>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <label for="">Height</label>
+                <mat-slider thumbLabel [displayWith]="formatLabelOfSlider" style="width: 80%;"  
+                [ngModelOptions]="{standalone: true}" tickInterval="1000" step="10" min="10" max="1350"
+                [(ngModel)]="imageHeight" (blur)="onChangeImageHeight($event)"  
+                aria-label="pixles"></mat-slider>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                
+                  <label>Background Color</label>
+                  <input pInputText [(ngModel)]="cBackgroundValue" [ngModelOptions]="{standalone: true}">
+                  <p-colorPicker #bgcsc [(ngModel)]="cBackgroundValue" (click)="onSelectBackgroundColor($event)"  [ngModelOptions]="{standalone: true}"></p-colorPicker>
+
+              </div>
+            </div>
+            <div *ngIf="currentElementType =='button'" class="row ml-2 mb-3">
+              <div class="col-md-12 col-sm-12">
+                  <label>Text</label>
+                  <input pInputText [(ngModel)]="buttonText" (change)="onChangeButtonText($event)" [ngModelOptions]="{standalone: true}">
+
+              </div>
+              <div class="col-md-12 col-sm-12" *ngIf="buttonType=='link'">
+                  <label>URL</label>
+                  <input pInputText [(ngModel)]="buttonLink" (change)="onChangeButtonUrl($event)" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <mat-button-toggle-group [(ngModel)]="controlAlignment" (click)="onhangeControlAlignemt($event)" aria-label="control Style" [ngModelOptions]="{standalone: true}">
+                  <mat-button-toggle value="left" aria-label="Text align left">
+                    <mat-icon>format_align_left</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="center" aria-label="Text align center">
+                    <mat-icon>format_align_center</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="right" aria-label="Text align right">
+                    <mat-icon>format_align_right</mat-icon>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+              <div class="col-md-12 col-sm-12 mt-3 mb-3">
+                <label style="margin-right: 10px;" for="">Type</label>
+                <p-dropdown [options]="buttonTypes" [(ngModel)]="buttonType" (click)="onChangeButtonType($event)"
+                 optionLabel="name" optionValue="id" [showClear]="true"></p-dropdown>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <label for="">Size</label>
+                <mat-slider thumbLabel [displayWith]="formatLabelOfSlider" style="width: 80%;" 
+                [(ngModel)]="fontSize" (blur)="onhangeButtonSize($event)" [ngModelOptions]="{standalone: true}"
+                tickInterval="1000" step="1" min="1" max="100"
+                  aria-label="pixles"></mat-slider>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <label for="">Width</label>
+                <mat-slider thumbLabel [displayWith]="formatLabelOfSlider" style="width: 80%;" 
+                [(ngModel)]="buttonWidth" (blur)="onhangeButtonWidth($event)" [ngModelOptions]="{standalone: true}"
+                tickInterval="1000" step="2" min="10" max="1000"
+                  aria-label="pixles"></mat-slider>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                  <label for="">Height</label>
+                <mat-slider thumbLabel [displayWith]="formatLabelOfSlider" style="width: 80%;"  
+                [ngModelOptions]="{standalone: true}" tickInterval="1000" step="2" min="10" max="1000"
+                [(ngModel)]="buttonHeight" (blur)="onhangeButtonHeight($event)"  
+                aria-label="pixles"></mat-slider>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <label for="">Background Color</label>
+                <input pInputText [(ngModel)]="cBackgroundValue" (change)="onSelectBackgroundColor($event)" [ngModelOptions]="{standalone: true}">
+                <p-colorPicker #bcsc [(ngModel)]="cBackgroundValue" (click)="onSelectBackgroundColor($event)"  [ngModelOptions]="{standalone: true}"></p-colorPicker>
+                <!-- <button hidden class="btn btn-primary" (click)="bcsc.onInputClick()">Add Color</button> -->
+                
+                
+               
+              </div>
+              <div class="col-md-12 col-sm-12">
+                
+                  <label>Button Color</label>
+                  <input pInputText [(ngModel)]="cButtonColor" (change)="onSelectButtonColor($event)" [ngModelOptions]="{standalone: true}">
+                  <p-colorPicker #bsc [(ngModel)]="cButtonColor" (click)="onSelectButtonColor($event)"  [ngModelOptions]="{standalone: true}"></p-colorPicker>
+                
+              </div>
+              <div class="col-md-12 col-sm-12">
+
+                  <label>Font Color</label>
+                  <input pInputText [(ngModel)]="cFontColor"  (change)="onSelectFontColor($event)" [ngModelOptions]="{standalone: true}">
+                  
+                <p-colorPicker #fsc [(ngModel)]="cFontColor" (click)="onSelectFontColor($event)"  [ngModelOptions]="{standalone: true}"></p-colorPicker>
+
+              </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="typeOfShow=='margin'">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <label>Margin left in px</label>
+                    <input [(ngModel)]="marginLeft" type="number" inputmode="decimal" class="p-inputtext p-component p-element p-inputnumber-input p-filled" (change)="onChangeMarginLeft($event)" id="marginLeft" aria-valuenow="56">
+  
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <label>Margin Top in px</label>
+                    <input [(ngModel)]="marginTop" type="number" inputmode="decimal" class="p-inputtext p-component p-element p-inputnumber-input p-filled" (change)="onChangeMarginTop($event)" id="marginTop" aria-valuenow="56">
+                </div>
+                
+                <div class="col-md-12 col-sm-12">
+                    <label>Margin right in px</label>
+                    <input [(ngModel)]="marginRight" type="number" inputmode="decimal" class="p-inputtext p-component p-element p-inputnumber-input p-filled" (change)="onChangeMarginRight($event)" id="marginRight" aria-valuenow="56">
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <label>Margin Bottom in px</label>
+                    <input [(ngModel)]="marginBottom" type="number" inputmode="decimal" class="p-inputtext p-component p-element p-inputnumber-input p-filled" (change)="onChangeMarginBottom($event)" id="marginBottom" aria-valuenow="56">
+                </div>
+              </div>
+        </div>
+        
+        <div *ngIf="typeOfShow != 'none' && currentElementId != ''">
+          <button mat-fab color="warn" (click)="onClickRemove($event)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div> 
+  </div>
